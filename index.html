@@ -1,677 +1,656 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neurodivergência, Autismo e TDAH | Margareth Almeida</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Margareth Almeida | Neuropsicopedagoga</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        :root {
-            --primary: #7B61FF;
-            --secondary: #48CAE4;
-            --mint: #80FFDB;
-            --coral: #FF6B9D;
-            --yellow: #FFD166;
-            --purple-light: #C8B6FF;
-            --dark: #2B2D42;
-            --light: #F0F4FF;
-            --card-bg: rgba(255,255,255,0.88);
-        }
+:root {
+  --blue:     #1D6FA4;
+  --blue-mid: #3B9DD2;
+  --blue-lt:  #A8D8F0;
+  --red:      #D94F4F;
+  --yellow:   #F5C518;
+  --green:    #4CAF7D;
+  --purple:   #8B5CF6;
+  --cream:    #F7F9FC;
+  --dark:     #152238;
+  --mid:      #3A536B;
+  --soft:     #E8F4FD;
+}
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 
-        body {
-            font-family: 'Nunito', 'Segoe UI', sans-serif;
-            line-height: 1.6;
-            color: var(--dark);
-            background: linear-gradient(160deg, #e0e7ff 0%, #f0fbff 40%, #fdf0ff 80%, #fff5f7 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--cream);
+  color: var(--dark);
+  overflow-x: hidden;
+  cursor: none;
+}
 
-        /* ========= CANVAS DE PARTÍCULAS ========= */
-        #particles-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
+/* ─── CUSTOM CURSOR ─── */
+#cursor {
+  position: fixed; top: 0; left: 0; z-index: 9999;
+  width: 22px; height: 22px;
+  background: var(--yellow);
+  border-radius: 50%;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  transition: background 0.3s;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+#cursor-trail {
+  position: fixed; top: 0; left: 0; z-index: 9998;
+  width: 40px; height: 40px;
+  border: 2px solid var(--blue-mid);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.5;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
 
-        /* ========= DINOSSAUROS FLUTUANTES ========= */
-        .dino-float {
-            position: fixed;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.18;
-            filter: drop-shadow(0 8px 24px rgba(123,97,255,0.18));
-        }
-        .dino-1 { bottom: 6%; left: 1%; width: 120px; animation: floatDino1 7s ease-in-out infinite; }
-        .dino-2 { top: 18%; right: 2%; width: 90px; animation: floatDino2 9s ease-in-out infinite; }
-        .dino-3 { top: 55%; left: 3%; width: 70px; animation: floatDino3 6s ease-in-out infinite; }
-        .dino-4 { bottom: 28%; right: 1%; width: 100px; animation: floatDino4 8s ease-in-out infinite; }
-        .dino-5 { top: 8%; left: 50%; width: 60px; animation: floatDino5 10s ease-in-out infinite; }
+/* ─── CANVAS DINOS ─── */
+#bg-canvas {
+  position: fixed; inset: 0;
+  width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+}
 
-        @keyframes floatDino1 {
-            0%,100%{transform:translateY(0) rotate(-5deg);}
-            50%{transform:translateY(-28px) rotate(5deg);}
-        }
-        @keyframes floatDino2 {
-            0%,100%{transform:translateY(0) rotate(8deg) scaleX(-1);}
-            50%{transform:translateY(-22px) rotate(-4deg) scaleX(-1);}
-        }
-        @keyframes floatDino3 {
-            0%,100%{transform:translateY(0) rotate(-3deg);}
-            50%{transform:translateY(-18px) rotate(6deg);}
-        }
-        @keyframes floatDino4 {
-            0%,100%{transform:translateY(0) rotate(5deg) scaleX(-1);}
-            50%{transform:translateY(-32px) rotate(-7deg) scaleX(-1);}
-        }
-        @keyframes floatDino5 {
-            0%,100%{transform:translateY(0) rotate(-6deg);}
-            50%{transform:translateY(-20px) rotate(4deg);}
-        }
+/* ─── PUZZLE PARTICLES ─── */
+.puzzle-float {
+  position: fixed;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  animation: puzzleRise linear infinite;
+}
+@keyframes puzzleRise {
+  0%   { opacity: 0; transform: translateY(0) rotate(0deg); }
+  10%  { opacity: 0.55; }
+  90%  { opacity: 0.45; }
+  100% { opacity: 0; transform: translateY(-105vh) rotate(540deg); }
+}
 
-        /* ========= HEADER ========= */
-        header {
-            position: relative;
-            z-index: 10;
-            background: linear-gradient(135deg, #7B61FF 0%, #48CAE4 60%, #FF6B9D 100%);
-            color: white;
-            text-align: center;
-            padding: 3rem 1rem 2.5rem;
-            border-radius: 0 0 40px 40px;
-            box-shadow: 0 8px 40px rgba(123,97,255,0.25);
-            overflow: hidden;
-        }
-        header::before {
-            content: '';
-            position: absolute;
-            top: -60px; left: -60px;
-            width: 220px; height: 220px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 50%;
-        }
-        header::after {
-            content: '';
-            position: absolute;
-            bottom: -80px; right: -40px;
-            width: 280px; height: 280px;
-            background: rgba(255,255,255,0.06);
-            border-radius: 50%;
-        }
-        .header-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(255,255,255,0.2);
-            border: 1.5px solid rgba(255,255,255,0.35);
-            border-radius: 50px;
-            padding: 0.35rem 1.1rem;
-            font-size: 0.85rem;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            margin-bottom: 1rem;
-            backdrop-filter: blur(8px);
-        }
-        header h1 {
-            font-size: 2.8rem;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            text-shadow: 0 2px 16px rgba(0,0,0,0.15);
-        }
-        header .subtitle {
-            font-size: 1.05rem;
-            opacity: 0.93;
-            margin-top: 0.5rem;
-            font-weight: 600;
-        }
-        .header-tags {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 0.6rem;
-            margin-top: 1.2rem;
-        }
-        .tag {
-            background: rgba(255,255,255,0.22);
-            border: 1px solid rgba(255,255,255,0.4);
-            border-radius: 20px;
-            padding: 0.3rem 0.9rem;
-            font-size: 0.82rem;
-            font-weight: 700;
-            letter-spacing: 0.03em;
-        }
+/* ─── HEADER ─── */
+header {
+  position: relative; z-index: 10;
+  background: linear-gradient(150deg, var(--blue) 0%, #0D4A75 55%, #09334F 100%);
+  overflow: hidden;
+  padding-bottom: 0;
+}
 
-        /* ========= CONTAINER ========= */
-        .container {
-            max-width: 1200px;
-            margin: 2.5rem auto;
-            padding: 0 1.2rem;
-            position: relative;
-            z-index: 5;
-        }
+.top-ribbon {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0.5rem;
+  background: var(--yellow);
+  padding: 0.45rem 1rem;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 800; font-size: 0.78rem;
+  color: var(--dark); letter-spacing: 0.08em; text-transform: uppercase;
+}
+.ribbon-dots { display: flex; gap: 5px; }
+.ribbon-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  animation: dotBounce 1.4s ease-in-out infinite;
+}
+.ribbon-dot:nth-child(1){ background:var(--blue);   animation-delay:0s; }
+.ribbon-dot:nth-child(2){ background:var(--red);    animation-delay:0.2s; }
+.ribbon-dot:nth-child(3){ background:var(--green);  animation-delay:0.4s; }
+.ribbon-dot:nth-child(4){ background:var(--purple); animation-delay:0.6s; }
+@keyframes dotBounce {
+  0%,100%{ transform:scaleY(1); }
+  50%{ transform:scaleY(1.7); }
+}
 
-        .section-title {
-            text-align: center;
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.7rem;
-        }
-        .section-title span.line {
-            flex: 1;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--purple-light));
-            max-width: 120px;
-        }
-        .section-title span.line.right {
-            background: linear-gradient(90deg, var(--purple-light), transparent);
-        }
+.header-body {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 3rem 1.5rem 5rem;
+  position: relative;
+}
 
-        /* ========= GRID DE ARTIGOS ========= */
-        .articles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-            gap: 1.6rem;
-        }
+.puzzle-ring {
+  position: relative;
+  width: 130px; height: 130px;
+  margin-bottom: 1.8rem;
+  animation: spinSlow 18s linear infinite;
+}
+@keyframes spinSlow { to { transform: rotate(360deg); } }
 
-        .article-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 24px rgba(123,97,255,0.10);
-            border: 1.5px solid rgba(123,97,255,0.10);
-            transition: transform 0.35s cubic-bezier(.23,1.01,.32,1), box-shadow 0.35s;
-            backdrop-filter: blur(10px);
-            position: relative;
-        }
-        .article-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 4px;
-            border-radius: 20px 20px 0 0;
-        }
-        .article-card:nth-child(3n+1)::before { background: linear-gradient(90deg, var(--primary), var(--secondary)); }
-        .article-card:nth-child(3n+2)::before { background: linear-gradient(90deg, var(--coral), var(--yellow)); }
-        .article-card:nth-child(3n+3)::before { background: linear-gradient(90deg, var(--secondary), var(--mint)); }
+.puzzle-ring svg { width: 100%; height: 100%; filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35)); }
 
-        .article-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 16px 48px rgba(123,97,255,0.20);
-        }
+.avatar-center {
+  position: absolute; inset: 18px;
+  background: var(--yellow);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.8rem;
+  border: 4px solid white;
+  animation: spinSlow 18s linear infinite reverse;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
 
-        .article-img-wrap {
-            position: relative;
-            overflow: hidden;
-            height: 170px;
-        }
-        .article-img-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-        .article-card:hover .article-img-wrap img {
-            transform: scale(1.07);
-        }
-        .img-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(0deg, rgba(123,97,255,0.18) 0%, transparent 60%);
-        }
+header h1 {
+  font-family: 'Baloo 2', cursive;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  color: white;
+  text-align: center;
+  line-height: 1.1;
+  text-shadow: 0 3px 16px rgba(0,0,0,0.4);
+}
+header h1 em { font-style: normal; color: var(--yellow); }
 
-        .article-card-content {
-            padding: 1.3rem 1.3rem 1.4rem;
-        }
-        .article-card h3 {
-            margin: 0 0 0.6rem;
-            color: var(--primary);
-            font-size: 1rem;
-            font-weight: 800;
-            line-height: 1.45;
-        }
-        .article-card p {
-            margin: 0 0 1.1rem;
-            color: #555;
-            font-size: 0.9rem;
-            line-height: 1.55;
-        }
-        .btn-read {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 0.5rem 1.2rem;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.88rem;
-            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
-            box-shadow: 0 4px 14px rgba(123,97,255,0.25);
-        }
-        .btn-read:hover {
-            background: linear-gradient(135deg, var(--coral), var(--yellow));
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(255,107,157,0.3);
-        }
-        .btn-read svg { width:14px; height:14px; }
+.header-role {
+  margin-top: 0.6rem;
+  font-size: 1rem; font-weight: 600;
+  color: rgba(255,255,255,0.82);
+  text-align: center; letter-spacing: 0.04em;
+}
 
-        /* ========= FOOTER ========= */
-        footer {
-            position: relative;
-            z-index: 5;
-            text-align: center;
-            padding: 2.5rem 1.5rem;
-            background: linear-gradient(135deg, var(--dark), #3d3b8e);
-            color: white;
-            margin-top: 3rem;
-            border-radius: 40px 40px 0 0;
-        }
-        footer .footer-logo {
-            font-size: 1.4rem;
-            font-weight: 800;
-            background: linear-gradient(90deg, var(--purple-light), var(--mint));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-        }
-        footer p { opacity: 0.8; font-size: 0.95rem; margin: 0.3rem 0; }
-        footer a {
-            color: var(--coral);
-            text-decoration: none;
-            font-weight: 700;
-            transition: color 0.2s;
-        }
-        footer a:hover { color: var(--yellow); }
-        .footer-divider {
-            width: 60px; height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--coral));
-            border-radius: 4px;
-            margin: 1rem auto;
-        }
+.tag-row {
+  display: flex; flex-wrap: wrap; gap: 0.6rem;
+  justify-content: center; margin-top: 1.6rem;
+}
+.tag {
+  padding: 0.38rem 1rem; border-radius: 50px;
+  font-size: 0.82rem; font-weight: 800; letter-spacing: 0.04em;
+  border: 2px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(6px);
+  transition: transform 0.25s, filter 0.25s;
+}
+.tag:hover { transform: scale(1.08); filter: brightness(1.15); }
+.tag-blue   { background: rgba(29,111,164,0.7); color: white; }
+.tag-red    { background: var(--red);    color: white;       border-color: var(--red); }
+.tag-yellow { background: var(--yellow); color: var(--dark); border-color: var(--yellow); }
+.tag-green  { background: var(--green);  color: white;       border-color: var(--green); }
+.tag-purple { background: var(--purple); color: white;       border-color: var(--purple); }
 
-        /* ========= SCROLL REVEAL ========= */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+.wave-wrap { line-height: 0; position: relative; z-index: 2; }
+.wave-wrap svg { display:block; width:100%; }
 
-        @media (max-width: 768px) {
-            header h1 { font-size: 1.9rem; }
-            .articles-grid { grid-template-columns: 1fr; }
-            .dino-1, .dino-3, .dino-5 { opacity: 0.10; }
-            .dino-2, .dino-4 { display: none; }
-        }
-    </style>
+/* ─── STAT STRIP ─── */
+.stat-strip {
+  position: relative; z-index: 5;
+  display: flex; flex-wrap: wrap;
+  background: white;
+  border-bottom: 3px solid var(--soft);
+  box-shadow: 0 4px 24px rgba(29,111,164,0.10);
+}
+.stat-item {
+  flex: 1; min-width: 160px;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 1.4rem 1rem;
+  border-right: 1px solid var(--soft);
+  transition: background 0.25s;
+}
+.stat-item:last-child { border-right: none; }
+.stat-item:hover { background: var(--soft); }
+.stat-icon { font-size: 1.9rem; margin-bottom: 0.3rem; }
+.stat-label { font-family:'Baloo 2',cursive; font-weight:800; font-size:0.9rem; color:var(--blue); }
+.stat-sub { font-size:0.75rem; color:var(--mid); }
+
+/* ─── MAIN ─── */
+main {
+  position: relative; z-index: 5;
+  max-width: 1240px; margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+.section-head { text-align: center; margin-bottom: 0.5rem; }
+.section-head h2 {
+  font-family: 'Baloo 2', cursive;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800; color: var(--blue);
+}
+.section-head p { color: var(--mid); font-size: 0.95rem; margin-top: 0.3rem; }
+
+.color-bar { display: flex; justify-content: center; gap: 6px; margin: 0.8rem 0 2.5rem; }
+.color-bar span { height: 5px; border-radius: 3px; }
+.color-bar span:nth-child(1){ width:55px; background:var(--blue); }
+.color-bar span:nth-child(2){ width:35px; background:var(--red); }
+.color-bar span:nth-child(3){ width:45px; background:var(--yellow); }
+.color-bar span:nth-child(4){ width:30px; background:var(--green); }
+
+/* ─── ARTICLE GRID ─── */
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.article-card {
+  background: white; border-radius: 20px; overflow: hidden;
+  box-shadow: 0 4px 22px rgba(29,111,164,0.09);
+  display: flex; flex-direction: column;
+  border-top: 6px solid var(--c, var(--blue));
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.55s ease, transform 0.55s ease, box-shadow 0.35s;
+}
+.article-card.visible { opacity: 1; transform: translateY(0); }
+.article-card:hover {
+  transform: translateY(-10px) scale(1.015);
+  box-shadow: 0 20px 50px rgba(29,111,164,0.18);
+}
+
+.card-c-blue   { --c: var(--blue); }
+.card-c-red    { --c: var(--red); }
+.card-c-yellow { --c: var(--yellow); }
+.card-c-green  { --c: var(--green); }
+.card-c-purple { --c: var(--purple); }
+
+.card-thumb {
+  height: 155px;
+  background: linear-gradient(140deg, var(--c, var(--blue)) 0%, #fff 160%);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.thumb-dots {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.3) 2px, transparent 2px);
+  background-size: 20px 20px;
+}
+.thumb-emoji {
+  font-size: 4rem; position: relative; z-index: 1;
+  animation: thumbFloat 3.5s ease-in-out infinite;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
+}
+.article-card:nth-child(2) .thumb-emoji { animation-delay: 0.4s; }
+.article-card:nth-child(3) .thumb-emoji { animation-delay: 0.8s; }
+.article-card:nth-child(4) .thumb-emoji { animation-delay: 1.2s; }
+.article-card:nth-child(5) .thumb-emoji { animation-delay: 0.6s; }
+.article-card:nth-child(6) .thumb-emoji { animation-delay: 1.0s; }
+.article-card:nth-child(7) .thumb-emoji { animation-delay: 0.2s; }
+.article-card:nth-child(8) .thumb-emoji { animation-delay: 0.9s; }
+.article-card:nth-child(9) .thumb-emoji { animation-delay: 1.5s; }
+@keyframes thumbFloat {
+  0%,100%{ transform: translateY(0) rotate(-4deg); }
+  50%    { transform: translateY(-12px) rotate(4deg); }
+}
+
+.card-body {
+  padding: 1.4rem 1.5rem 1.6rem;
+  display: flex; flex-direction: column; flex: 1;
+}
+.card-body h3 {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.05rem; font-weight: 800;
+  color: var(--dark); line-height: 1.35; margin-bottom: 0.7rem;
+}
+.card-body p {
+  font-size: 0.88rem; color: var(--mid);
+  line-height: 1.65; flex: 1; margin-bottom: 1.3rem;
+}
+.card-btn {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  padding: 0.52rem 1.15rem;
+  background: var(--c, var(--blue)); color: white;
+  text-decoration: none; border-radius: 50px;
+  font-weight: 800; font-size: 0.85rem; align-self: flex-start;
+  transition: filter 0.2s, transform 0.2s;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+.card-btn:hover { filter: brightness(1.12); transform: scale(1.06); }
+.card-btn svg { width:13px; height:13px; stroke:white; fill:none; stroke-width:2.5; }
+
+/* ─── FOOTER ─── */
+footer {
+  position: relative; z-index: 5;
+  background: var(--dark); color: white;
+  text-align: center; padding: 3rem 1rem 2rem;
+}
+.footer-name { font-family: 'Baloo 2', cursive; font-size: 1.8rem; font-weight: 800; color: var(--yellow); }
+.footer-title { font-size: 0.9rem; opacity: 0.65; margin-bottom: 1.4rem; }
+.insta-btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.65rem 1.6rem;
+  background: linear-gradient(135deg, #8a3ab9, #e95950, #fcaf45);
+  color: white; text-decoration: none; border-radius: 50px;
+  font-weight: 800; font-size: 0.92rem;
+  transition: transform 0.2s, filter 0.2s;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+}
+.insta-btn:hover { transform: scale(1.06); filter: brightness(1.1); }
+.footer-copy { margin-top: 1.8rem; font-size: 0.75rem; opacity: 0.35; }
+
+@media (max-width: 680px) {
+  header h1 { font-size: 1.8rem; }
+  .articles-grid { grid-template-columns: 1fr; }
+  .stat-strip { flex-direction: column; }
+  .stat-item { border-right: none; border-bottom: 1px solid var(--soft); }
+}
+</style>
 </head>
 <body>
 
-<!-- Partículas -->
-anvas id="particles-canvas"></canvas>
+<div id="cursor"></div>
+<div id="cursor-trail"></div>
+<canvas id="bg-canvas"></canvas>
+<div id="puzzle-container"></div>
 
-<!-- Dinossauros flutuantes (SVG inline) -->
-<div class="dino-float dino-1">
-  <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="60" cy="65" rx="35" ry="22" fill="#7B61FF"/>
-    <ellipse cx="60" cy="63" rx="33" ry="20" fill="#9B85FF"/>
-    ircle cx="82" cy="52" r="14" fill="#7B61FF"/>
-    ircle cx="82" cy="52" r="11" fill="#9B85FF"/>
-    ircle cx="86" cy="49" r="3" fill="white"/>
-    ircle cx="87" cy="48" r="1.5" fill="#2B2D42"/>
-    <path d="M88 55 Q92 57 90 60" stroke="#7B61FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-    <rect x="30" y="82" width="10" height="16" rx="5" fill="#7B61FF"/>
-    <rect x="46" y="84" width="10" height="14" rx="5" fill="#7B61FF"/>
-    <rect x="62" y="83" width="10" height="15" rx="5" fill="#7B61FF"/>
-    <rect x="78" y="82" width="10" height="16" rx="5" fill="#7B61FF"/>
-    <path d="M25 63 Q10 55 12 45 Q14 38 20 40" stroke="#9B85FF" stroke-width="4" fill="none" stroke-linecap="round"/>
-    <path d="M78 46 Q84 32 80 22 Q82 14 88 16" stroke="#7B61FF" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-    <path d="M88 16 L92 10 L86 12 Z" fill="#7B61FF"/>
-    <ellipse cx="55" cy="58" rx="6" ry="4" fill="#C8B6FF" opacity="0.6"/>
-    <ellipse cx="70" cy="62" rx="5" ry="3.5" fill="#C8B6FF" opacity="0.6"/>
-  </svg>
-</div>
-
-<div class="dino-float dino-2">
-  <svg viewBox="0 0 100 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="50" cy="58" rx="28" ry="18" fill="#FF6B9D"/>
-    <ellipse cx="50" cy="56" rx="26" ry="17" fill="#FF8FB3"/>
-    ircle cx="70" cy="45" r="12" fill="#FF6B9D"/>
-    ircle cx="70" cy="45" r="9" fill="#FF8FB3"/>
-    ircle cx="73" cy="42" r="2.5" fill="white"/>
-    ircle cx="74" cy="41" r="1.2" fill="#2B2D42"/>
-    <path d="M73 48 Q76 50 74 52" stroke="#FF6B9D" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-    <rect x="26" y="72" width="8" height="14" rx="4" fill="#FF6B9D"/>
-    <rect x="40" y="74" width="8" height="12" rx="4" fill="#FF6B9D"/>
-    <rect x="54" y="73" width="8" height="13" rx="4" fill="#FF6B9D"/>
-    <rect x="68" y="72" width="8" height="14" rx="4" fill="#FF6B9D"/>
-    <path d="M22 56 Q8 50 10 40 Q12 32 18 34" stroke="#FF8FB3" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-    <path d="M68 40 Q74 28 70 18 Q72 11 78 13" stroke="#FF6B9D" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <path d="M78 13 L82 7 L76 9 Z" fill="#FF6B9D"/>
-  </svg>
-</div>
-
-<div class="dino-float dino-3">
-  <svg viewBox="0 0 90 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="45" cy="52" rx="24" ry="16" fill="#48CAE4"/>
-    <ellipse cx="45" cy="50" rx="22" ry="15" fill="#74D6EC"/>
-    ircle cx="62" cy="40" r="11" fill="#48CAE4"/>
-    ircle cx="62" cy="40" r="8.5" fill="#74D6EC"/>
-    ircle cx="65" cy="37" r="2.2" fill="white"/>
-    ircle cx="66" cy="36" r="1.1" fill="#2B2D42"/>
-    <rect x="22" y="64" width="7" height="12" rx="3.5" fill="#48CAE4"/>
-    <rect x="34" y="66" width="7" height="10" rx="3.5" fill="#48CAE4"/>
-    <rect x="46" y="65" width="7" height="11" rx="3.5" fill="#48CAE4"/>
-    <rect x="58" y="64" width="7" height="12" rx="3.5" fill="#48CAE4"/>
-    <path d="M18 50 Q6 44 8 35 Q10 28 16 30" stroke="#74D6EC" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <path d="M60 36 Q65 24 62 15" stroke="#48CAE4" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <path d="M62 15 L66 9 L60 11 Z" fill="#48CAE4"/>
-  </svg>
-</div>
-
-<div class="dino-float dino-4">
-  <svg viewBox="0 0 110 95" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="55" cy="62" rx="32" ry="20" fill="#80FFDB"/>
-    <ellipse cx="55" cy="60" rx="30" ry="19" fill="#A8FFE8"/>
-    ircle cx="76" cy="50" r="13" fill="#80FFDB"/>
-    ircle cx="76" cy="50" r="10" fill="#A8FFE8"/>
-    ircle cx="79" cy="47" r="2.8" fill="white"/>
-    ircle cx="80" cy="46" r="1.4" fill="#2B2D42"/>
-    <path d="M80 53 Q84 55 82 58" stroke="#80FFDB" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-    <rect x="28" y="78" width="9" height="15" rx="4.5" fill="#80FFDB"/>
-    <rect x="42" y="80" width="9" height="13" rx="4.5" fill="#80FFDB"/>
-    <rect x="56" y="79" width="9" height="14" rx="4.5" fill="#80FFDB"/>
-    <rect x="70" y="78" width="9" height="15" rx="4.5" fill="#80FFDB"/>
-    <path d="M24 60 Q10 53 12 43 Q14 35 20 37" stroke="#A8FFE8" stroke-width="4" fill="none" stroke-linecap="round"/>
-    <path d="M74 44 Q80 30 76 20 Q78 12 84 14" stroke="#80FFDB" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-    <path d="M84 14 L88 8 L82 10 Z" fill="#80FFDB"/>
-  </svg>
-</div>
-
-<div class="dino-float dino-5">
-  <svg viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="40" cy="46" rx="22" ry="14" fill="#FFD166"/>
-    <ellipse cx="40" cy="44" rx="20" ry="13" fill="#FFE08A"/>
-    ircle cx="56" cy="35" r="10" fill="#FFD166"/>
-    ircle cx="56" cy="35" r="7.5" fill="#FFE08A"/>
-    ircle cx="59" cy="32" r="2" fill="white"/>
-    ircle cx="60" cy="31" r="1" fill="#2B2D42"/>
-    <rect x="18" y="57" width="7" height="12" rx="3.5" fill="#FFD166"/>
-    <rect x="29" y="59" width="7" height="10" rx="3.5" fill="#FFD166"/>
-    <rect x="40" y="58" width="7" height="11" rx="3.5" fill="#FFD166"/>
-    <rect x="51" y="57" width="7" height="12" rx="3.5" fill="#FFD166"/>
-    <path d="M14 44 Q3 38 5 30 Q7 23 13 25" stroke="#FFE08A" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <path d="M54 30 Q59 19 56 11" stroke="#FFD166" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <path d="M56 11 L60 5 L54 7 Z" fill="#FFD166"/>
-  </svg>
-</div>
-
-<!-- Header -->
+<!-- ══ HEADER ══ -->
 <header>
-    <div class="header-badge">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white"/></svg>
-        Neuropsicopedagoga Especialista
+  <div class="top-ribbon">
+    <div class="ribbon-dots">
+      <div class="ribbon-dot"></div><div class="ribbon-dot"></div>
+      <div class="ribbon-dot"></div><div class="ribbon-dot"></div>
     </div>
-    <h1>Margareth Almeida</h1>
-    <p class="subtitle">Especialista em Neurodivergência, Autismo e TDAH</p>
-    <div class="header-tags">
-        <span class="tag">🧠 Neurodivergência</span>
-        <span class="tag">🌈 Autismo · TEA</span>
-        <span class="tag">⚡ TDAH</span>
-        <span class="tag">🦕 Neuropsicopedagogia</span>
+    &nbsp; Especialista em Neurodivergência · TEA · TDAH &nbsp;
+    <div class="ribbon-dots">
+      <div class="ribbon-dot"></div><div class="ribbon-dot"></div>
+      <div class="ribbon-dot"></div><div class="ribbon-dot"></div>
     </div>
+  </div>
+
+  <div class="header-body">
+    <div class="puzzle-ring">
+      <svg viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="65" cy="65" r="62" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="3"/>
+        <path d="M65,3 A62,62 0 0,1 127,65" stroke="#1D6FA4" stroke-width="10" fill="none" stroke-linecap="round"/>
+        <path d="M127,65 A62,62 0 0,1 65,127" stroke="#D94F4F" stroke-width="10" fill="none" stroke-linecap="round"/>
+        <path d="M65,127 A62,62 0 0,1 3,65" stroke="#F5C518" stroke-width="10" fill="none" stroke-linecap="round"/>
+        <path d="M3,65 A62,62 0 0,1 65,3" stroke="#4CAF7D" stroke-width="10" fill="none" stroke-linecap="round"/>
+        <circle cx="96" cy="14" r="5" fill="#1D6FA4" opacity="0.8"/>
+        <circle cx="116" cy="96" r="5" fill="#D94F4F" opacity="0.8"/>
+        <circle cx="34" cy="116" r="5" fill="#F5C518" opacity="0.8"/>
+        <circle cx="14" cy="34" r="5" fill="#4CAF7D" opacity="0.8"/>
+      </svg>
+      <div class="avatar-center">🧠</div>
+    </div>
+
+    <h1>Margareth <em>Almeida</em></h1>
+    <p class="header-role">Neuropsicopedagoga · Especialista em Neurodivergência</p>
+
+    <div class="tag-row">
+      <span class="tag tag-blue">🧩 TEA / Autismo</span>
+      <span class="tag tag-red">⚡ TDAH</span>
+      <span class="tag tag-green">🌈 Neurodivergência</span>
+      <span class="tag tag-purple">📚 Artigos</span>
+      <span class="tag tag-yellow">🦕 Brincar & Aprender</span>
+    </div>
+  </div>
+
+  <div class="wave-wrap">
+    <svg viewBox="0 0 1440 70" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,35 C200,70 400,0 600,35 C800,70 1000,5 1200,35 C1320,52 1390,42 1440,35 L1440,70 L0,70 Z" fill="#F7F9FC"/>
+    </svg>
+  </div>
 </header>
 
-<main class="container">
-    <div class="section-title">
-        <span class="line"></span>
-        📚 Artigos & Conteúdos
-        <span class="line right"></span>
-    </div>
+<!-- ══ STAT STRIP ══ -->
+<div class="stat-strip">
+  <div class="stat-item"><span class="stat-icon">🧩</span><span class="stat-label">TEA / Autismo</span><span class="stat-sub">Diagnóstico & Suporte</span></div>
+  <div class="stat-item"><span class="stat-icon">⚡</span><span class="stat-label">TDAH</span><span class="stat-sub">Identificação & Estratégias</span></div>
+  <div class="stat-item"><span class="stat-icon">🌈</span><span class="stat-label">Neurodivergência</span><span class="stat-sub">Inclusão na Infância</span></div>
+  <div class="stat-item"><span class="stat-icon">🦕</span><span class="stat-label">Brincar & Desenvolvimento</span><span class="stat-sub">Autonomia & Criatividade</span></div>
+  <div class="stat-item"><span class="stat-icon">💙</span><span class="stat-label">Apoio às Famílias</span><span class="stat-sub">Orientação & Acolhimento</span></div>
+</div>
 
-    <section class="articles-grid">
+<!-- ══ MAIN ══ -->
+<main>
+  <div class="section-head">
+    <h2>Artigos & Reflexões</h2>
+    <p>Conteúdos especializados para famílias e educadores</p>
+  </div>
+  <div class="color-bar"><span></span><span></span><span></span><span></span></div>
 
-        <article class="article-card reveal">
-            <div class="article-img-wrap">
-                <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&h=200&fit=crop" alt="Autonomia no Brincar">
-                <div class="img-overlay"></div>
-            </div>
-            <div class="article-card-content">
-                <h3>Autonomia no Brincar: Por que seu filho precisa fazer sozinho, mesmo que não seja perfeito</h3>
-                <p>Entenda a importância de incentivar a autonomia das crianças durante as brincadeiras e como isso impacta no desenvolvimento.</p>
-                <a class="btn-read" href="https://revistacreator.com.br/autonomia-no-brincar-por-que-seu-filho-precisa-fazer-sozinho-mesmo-que-nao-seja-perfeito/" target="_blank">
-                    Leia mais
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
-        </article>
+  <div class="articles-grid">
 
-        <article class="article-card reveal">
-            <div class="article-img-wrap">
-                <img src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=400&h=200&fit=crop" alt="TDAH ou Autismo">
-                <div class="img-overlay"></div>
-            </div>
-            <div class="article-card-content">
-                <h3>TDAH ou Autismo: como diferenciar e por que muitas famílias se confundem</h3>
-                <p>Saiba quais são os sinais que ajudam a distinguir TDAH e autismo na infância e a importância do diagnóstico correto.</p>
-                <a class="btn-read" href="https://revistacreator.com.br/tdah-ou-autismo/" target="_blank">
-                    Leia mais
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
-        </article>
+    <article class="article-card card-c-yellow">
+      <div class="card-thumb"><div class="thumb-dots"></div><span class="thumb-emoji">🧸</span></div>
+      <div class="card-body">
+        <h3>Autonomia no Brincar: Por que seu filho precisa fazer sozinho, mesmo que não seja perfeito</h3>
+        <p>Entenda a importância de incentivar a autonomia das crianças durante as brincadeiras e como isso impacta no desenvolvimento.</p>
+        <a class="card-btn" href="https://revistacreator.com.br/autonomia-no-brincar-por-que-seu-filho-precisa-fazer-sozinho-mesmo-que-nao-seja-perfeito/" target="_blank">Leia mais <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </article>
 
-        <article class="article-card reveal">
-            <div class="article-img-wrap">
-                <img src="https://images.unsplash.com/photo-1484820540004-14229fe36ca4?w=400&h=200&fit=crop" alt="Sinais de Autismo e TDAH">
-                <div class="img-overlay"></div>
-            </div>
-            <div class="article-card-content">
-                <h3>Sinais de autismo e TDAH na infância que passam despercebidos</h3>
-                <p>Conheça os sinais sutis que podem indicar autismo ou TDAH e por que é importante estar atento desde cedo.</p>
-                <a class="btn-read" href="https://influencenow.com.br/sinais-de-autismo-na-infancia-e-de-tdah-na-infancia-que-passam-despercebidos-e-por-que-isso-importa/" target="_blank">
-                    Leia mais
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
-        </article>
+    <article class="article-card card-c-red">
+      <div class="card-thumb"><div class="thumb-dots"></div><span class="thumb-emoji">⚡</span></div>
+      <div class="card-body">
+        <h3>TDAH ou Autismo: como diferenciar e por que muitas famílias se confundem</h3>
+        <p>Saiba quais são os sinais que ajudam a distinguir TDAH e autismo na infância e a importância do diagnóstico correto.</p>
+        <a class="card-btn" href="https://revistacreator.com.br/tdah-ou-autismo/" target="_blank">Leia mais <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </article>
 
-        <article class="article-card reveal">
-            <div class="article-img-wrap">
-                <img src="https://images.unsplash.com/photo-1491013516836-7db643ee125a?w=400&h=200&fit=crop" alt="Diagnóstico de TEA">
-                <div class="img-overlay"></div>
-            </div>
-            <div class="article-card-content">
-                <h3>Por que tantos pais sentem uma tristeza intensa ao receber o diagnóstico de TEA do filho</h3>
-                <p>Reflexões sobre o impacto emocional do diagnóstico e como lidar com essa fase de forma saudável.</p>
-                <a class="btn-read" href="https://conexaoceo.com.br/por-que-tantos-pais-sentem-uma-tristeza-intensa-ao-receber-o-diagnostico-de-tea-do-filho/" target="_blank">
-                    Leia mais
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
-        </article>
+    <article class="article-card card-c-blue">
+      <div class="card-thumb"><div class="thumb-dots"></div><span class="thumb-emoji">🔍</span></div>
+      <div class="card-body">
+        <h3>Sinais de autismo e TDAH na infância que passam despercebidos</h3>
+        <p>Conheça os sinais sutis que podem indicar autismo ou TDAH e por que é importante estar atento desde cedo.</p>
+        <a class="card-btn" href="https://influencenow.com.br/sinais-de-autismo-na-infancia-e-de-tdah-na-infancia-que-passam-despercebidos-e-por-que-isso-importa/" target="_blank">Leia mais <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </article>
 
-        <article class="article-card reveal">
-            <div class="article-img-wrap">
-                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=200&fit=crop" alt="Brincar e Inclusão">
-                <div class="img-overlay"></div>
-            </div>
-            <div class="article-card-content">
-                <h3>Brincar também é inclusão: por que nem todo brinquedo serve para toda criança</h3>
-                <p>Como adaptar brincadeiras e brinquedos para crianças neurodivergentes, promovendo inclusão e diversão.</p>
-                <a class="btn-read" href="https://revistaimprensabrasil.com.br/brincar-tambem-e-inclusao-por-que-nem-todo-brinquedo-serve-para-toda-crianca/" target="_blank">
-                    Leia mais
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
-        </article>
+    <article class="article-card card-c-green">
+      <div class="card-thumb"><div class="thumb-dots"></div><span class="thumb-emoji">💙</span></div>
+      <div class="card-body">
+        <h3>Por que tantos pais sentem uma tristeza intensa ao receber o diagnóstico de TEA do filho</h3>
+        <p>Reflexões sobre o impacto emocional do diagnóstico e como lidar com essa fase de forma saudável.</p>
+        <a class="card-btn" href="https://conexaoceo.com.br/por-que-tantos-pais-sentem-uma-tristeza-intensa-ao-receber-o-diagnostico-de-tea-do-filho/" target="_blank">Leia mais <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </article>
 
-        <article class="article-card reveal">
-            <div class="article-img-wrap">
-                <img src="https://images.unsplash.com/photo-1472162072942-cd5147eb3902?w=400&h=200&fit=crop" alt="Ambiente de Brincar">
-                <div class="img-overlay"></div>
-            </div>
-            <div class="article-card-content">
-                <h3>Como criar um ambiente de brincar seguro e estimulante para crianças neurodivergentes</h3>
-                <p>Dicas práticas para montar espaços que respeitem as necessidades sensoriais e cognitivas das crianças.</p>
-                <a class="btn-read" href="https://revistacreator.com.br/como-criar-um-ambiente-de-brincar-seguro-e-estimulante-para-criancas-neurodivergentes/" target="_blank">
-                    Leia mais
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
-        </article>
+    <article class="article-card card-c-purple">
+      <div class="card-thumb"><div class="thumb-dots"></div><span class="thumb-emoji">🎮</span></div>
+      <div class="card-body">
+        <h3>Brincar também é inclusão: por que nem todo brinquedo serve para toda criança</h3>
+        <p>Como adaptar brincadeiras e brinquedos para crianças neurodivergentes, promovendo inclusão e diversão.</p>
+        <a class="card-btn" href="https://revistaimprensabrasil.com.br/brincar-tambem-e-inclusao-por-que-nem-todo-brinquedo-serve-para-toda-crianca/" target="_blank">Leia mais <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </article>
 
-        <article class="article-card reveal">
-            <div class="article-img-wrap">
-                <img src="https://images.unsplash.com/photo-1620838931880-6c5cb43b9dc0?w=400&h=200&fit=crop" alt="Neurodivergência">
-                <div class="img-overlay"></div>
-            </div>
-            <div class="article-card-content">
-                <h3>Neurodivergência: o que é, como identificar e como lidar na infância</h3>
-                <p>Um guia completo sobre neurodivergência, seus tipos e como apoiar o desenvolvimento das crianças.</p>
-                <a class="btn-read" href="https://www.jornalimpactodegoias.com/2026/02/neurodivergencia-o-que-e-como.html" target="_blank">
-                    Leia mais
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
-        </article>
+    <article class="article-card card-c-blue">
+      <div class="card-thumb"><div class="thumb-dots"></div><span class="thumb-emoji">🏠</span></div>
+      <div class="card-body">
+        <h3>Como criar um ambiente de brincar seguro e estimulante para crianças neurodivergentes</h3>
+        <p>Dicas práticas para montar espaços que respeitem as necessidades sensoriais e cognitivas das crianças.</p>
+        <a class="card-btn" href="https://revistacreator.com.br/como-criar-um-ambiente-de-brincar-seguro-e-estimulante-para-criancas-neurodivergentes/" target="_blank">Leia mais <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </article>
 
-        <article class="article-card reveal">
-            <div class="article-img-wrap">
-                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&h=200&fit=crop" alt="Autismo ou TDAH">
-                <div class="img-overlay"></div>
-            </div>
-            <div class="article-card-content">
-                <h3>Autismo ou TDAH: como diferenciar e por que muitas famílias se confundem</h3>
-                <p>Entenda as principais diferenças e semelhanças entre autismo e TDAH, e quando buscar ajuda especializada.</p>
-                <a class="btn-read" href="https://www.ocentroeste.com.br/2026/03/autismo-ou-tdah-como-diferenciar-e-por.html" target="_blank">
-                    Leia mais
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
-        </article>
+    <article class="article-card card-c-red">
+      <div class="card-thumb"><div class="thumb-dots"></div><span class="thumb-emoji">🌈</span></div>
+      <div class="card-body">
+        <h3>Neurodivergência: o que é, como identificar e como lidar na infância</h3>
+        <p>Um guia completo sobre neurodivergência, seus tipos e como apoiar o desenvolvimento das crianças.</p>
+        <a class="card-btn" href="https://www.jornalimpactodegoias.com/2026/02/neurodivergencia-o-que-e-como.html" target="_blank">Leia mais <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </article>
 
-        <article class="article-card reveal">
-            <div class="article-img-wrap">
-                <img src="https://images.unsplash.com/photo-1566140967404-b8b3932483f5?w=400&h=200&fit=crop" alt="Comportamento Infantil">
-                <div class="img-overlay"></div>
-            </div>
-            <div class="article-card-content">
-                <h3>Seu filho não obedece… ou não consegue? O que ninguém te explica sobre comportamento infantil</h3>
-                <p>Descubra por que muitas vezes o que parece desobediência pode ser uma dificuldade não identificada.</p>
-                <a class="btn-read" href="https://www.ocentroeste.com.br/2026/03/seu-filho-nao-obedece-ou-nao-consegue-o.html" target="_blank">
-                    Leia mais
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
-        </article>
+    <article class="article-card card-c-green">
+      <div class="card-thumb"><div class="thumb-dots"></div><span class="thumb-emoji">🧩</span></div>
+      <div class="card-body">
+        <h3>Autismo ou TDAH: como diferenciar e por que muitas famílias se confundem</h3>
+        <p>Entenda as principais diferenças e semelhanças entre autismo e TDAH, e quando buscar ajuda especializada.</p>
+        <a class="card-btn" href="https://www.ocentroeste.com.br/2026/03/autismo-ou-tdah-como-diferenciar-e-por.html" target="_blank">Leia mais <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </article>
 
-    </section>
+    <article class="article-card card-c-yellow">
+      <div class="card-thumb"><div class="thumb-dots"></div><span class="thumb-emoji">🤔</span></div>
+      <div class="card-body">
+        <h3>Seu filho não obedece… ou não consegue? O que ninguém te explica sobre comportamento infantil</h3>
+        <p>Descubra por que muitas vezes o que parece desobediência pode ser uma dificuldade não identificada.</p>
+        <a class="card-btn" href="https://www.ocentroeste.com.br/2026/03/seu-filho-nao-obedece-ou-nao-consegue-o.html" target="_blank">Leia mais <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </article>
+
+  </div>
 </main>
 
+<!-- ══ FOOTER ══ -->
 <footer>
-    <div class="footer-logo">🦕 Margareth Almeida</div>
-    <div class="footer-divider"></div>
-    <p>Neuropsicopedagoga | Especialista em Neurodivergência</p>
-    <p style="margin-top:0.6rem;">
-        Siga no Instagram: <a href="https://www.instagram.com/oCentroeste" target="_blank">@oCentroeste</a>
-    </p>
-    <p style="margin-top:0.8rem; font-size:0.8rem; opacity:0.5;">&copy; 2026 Margareth Almeida | Neuropsicopedagoga</p>
+  <div class="footer-name">Margareth Almeida</div>
+  <div class="footer-title">Neuropsicopedagoga · TEA · TDAH · Neurodivergência</div>
+  <a class="insta-btn" href="https://www.instagram.com/oCentroeste" target="_blank">📸 Siga no Instagram · @oCentroeste</a>
+  <div class="footer-copy">© 2026 Margareth Almeida — Todos os direitos reservados</div>
 </footer>
 
 <script>
-// ===== PARTÍCULAS DE FUNDO =====
-const canvas = document.getElementById('particles-canvas');
-const ctx = canvas.getContext('2d');
-let particles = [];
-const colors = ['#7B61FF','#48CAE4','#FF6B9D','#FFD166','#80FFDB','#C8B6FF'];
+/* ═══ 1. CUSTOM CURSOR ═══ */
+const cur = document.getElementById('cursor');
+const trail = document.getElementById('cursor-trail');
+const CURSOR_COLS = ['#1D6FA4','#D94F4F','#F5C518','#4CAF7D','#8B5CF6'];
+let mx=0, my=0, tx=0, ty=0;
 
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-
-function createParticle() {
-    return {
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 5 + 2,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        alpha: Math.random() * 0.4 + 0.1,
-        pulse: Math.random() * Math.PI * 2
-    };
-}
-
-for (let i = 0; i < 55; i++) particles.push(createParticle());
-
-function animateParticles() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach(p => {
-        p.pulse += 0.025;
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0) p.x = canvas.width;
-        if (p.x > canvas.width) p.x = 0;
-        if (p.y < 0) p.y = canvas.height;
-        if (p.y > canvas.height) p.y = 0;
-        const a = p.alpha * (0.7 + 0.3 * Math.sin(p.pulse));
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r * (0.8 + 0.2 * Math.sin(p.pulse)), 0, Math.PI * 2);
-        ctx.fillStyle = p.color + Math.round(a * 255).toString(16).padStart(2,'0');
-        ctx.fill();
-    });
-    requestAnimationFrame(animateParticles);
-}
-animateParticles();
-
-// ===== SCROLL REVEAL =====
-const reveals = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-        if (entry.isIntersecting) {
-            setTimeout(() => entry.target.classList.add('visible'), i * 80);
-        }
-    });
-}, { threshold: 0.12 });
-reveals.forEach(el => observer.observe(el));
-
-// ===== EFEITO RIPPLE NOS CARDS =====
-document.querySelectorAll('.article-card').forEach(card => {
-    card.addEventListener('click', function(e) {
-        const ripple = document.createElement('span');
-        const rect = card.getBoundingClientRect();
-        ripple.style.cssText = `
-            position:absolute;left:${e.clientX-rect.left}px;top:${e.clientY-rect.top}px;
-            width:0;height:0;border-radius:50%;background:rgba(123,97,255,0.18);
-            transform:translate(-50%,-50%);animation:rippleAnim 0.6s ease-out forwards;
-            pointer-events:none;z-index:99;
-        `;
-        card.appendChild(ripple);
-        setTimeout(() => ripple.remove(), 700);
-    });
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx + 'px';
+  cur.style.top  = my + 'px';
+  cur.style.background = CURSOR_COLS[Math.floor(Date.now()/600) % CURSOR_COLS.length];
 });
+(function animTrail(){
+  tx += (mx-tx)*0.12; ty += (my-ty)*0.12;
+  trail.style.left = tx + 'px';
+  trail.style.top  = ty + 'px';
+  requestAnimationFrame(animTrail);
+})();
 
-const style = document.createElement('style');
-style.textContent = `@keyframes rippleAnim{to{width:300px;height:300px;opacity:0;}}`;
-document.head.appendChild(style);
+/* ═══ 2. DINOSAURS ON CANVAS ═══ */
+(function(){
+  const cv = document.getElementById('bg-canvas');
+  const ctx = cv.getContext('2d');
+  let W, H;
+  const resize = () => { W = cv.width = innerWidth; H = cv.height = innerHeight; };
+  resize();
+  window.addEventListener('resize', resize);
+
+  const DINO_COLS = ['#1D6FA4','#D94F4F','#F5C518','#4CAF7D','#8B5CF6','#3B9DD2'];
+
+  function drawRex(c, x, y, sc, col, a, flip) {
+    c.save();
+    c.globalAlpha = a;
+    c.translate(x, y);
+    c.scale(flip ? -sc : sc, sc);
+    c.fillStyle = col;
+    // body
+    c.beginPath(); c.ellipse(0,0,26,16,0,0,Math.PI*2); c.fill();
+    // neck
+    c.beginPath(); c.moveTo(18,-10); c.quadraticCurveTo(30,-22,30,-32); c.quadraticCurveTo(32,-20,22,-8); c.fill();
+    // head
+    c.beginPath(); c.ellipse(30,-36,14,10,-0.2,0,Math.PI*2); c.fill();
+    // eye
+    c.fillStyle='#fff'; c.beginPath(); c.ellipse(37,-39,3.5,3.5,0,0,Math.PI*2); c.fill();
+    c.fillStyle='#111'; c.beginPath(); c.ellipse(38,-39,1.8,1.8,0,0,Math.PI*2); c.fill();
+    // jaw
+    c.fillStyle=col; c.beginPath(); c.moveTo(22,-28); c.lineTo(46,-25); c.lineTo(44,-32); c.closePath(); c.fill();
+    c.fillStyle='#fff';
+    [40,36,32].forEach(tx=>{ c.beginPath(); c.moveTo(tx,-28); c.lineTo(tx+2,-25); c.lineTo(tx+4,-28); c.closePath(); c.fill(); });
+    // arm
+    c.fillStyle=col; c.beginPath(); c.moveTo(18,-4); c.lineTo(28,2); c.lineTo(24,8); c.closePath(); c.fill();
+    // tail
+    c.beginPath(); c.moveTo(-26,4); c.quadraticCurveTo(-54,18,-50,-12); c.quadraticCurveTo(-46,-20,-26,-4); c.fill();
+    // legs
+    [[-8,12],[8,12]].forEach(([lx])=>{
+      c.beginPath(); c.moveTo(lx,12); c.lineTo(lx-3,34); c.lineTo(lx+6,34); c.lineTo(lx+9,12); c.closePath(); c.fill();
+      c.beginPath(); c.moveTo(lx-3,34); c.lineTo(lx-8,36); c.lineTo(lx+10,36); c.lineTo(lx+6,34); c.closePath(); c.fill();
+    });
+    // highlight
+    c.fillStyle='rgba(255,255,255,0.13)'; c.beginPath(); c.ellipse(5,-2,10,6,-0.4,0,Math.PI*2); c.fill();
+    c.restore();
+  }
+
+  function drawBrachio(c, x, y, sc, col, a, flip) {
+    c.save(); c.globalAlpha=a; c.translate(x,y); c.scale(flip?-sc:sc,sc); c.fillStyle=col;
+    c.beginPath(); c.ellipse(0,0,32,18,0,0,Math.PI*2); c.fill();
+    c.beginPath(); c.moveTo(22,-8); c.quadraticCurveTo(28,-40,18,-65); c.quadraticCurveTo(10,-42,14,-8); c.fill();
+    c.beginPath(); c.ellipse(18,-70,10,7,0.3,0,Math.PI*2); c.fill();
+    c.fillStyle='#fff'; c.beginPath(); c.ellipse(23,-73,3,3,0,0,Math.PI*2); c.fill();
+    c.fillStyle='#111'; c.beginPath(); c.ellipse(24,-73,1.5,1.5,0,0,Math.PI*2); c.fill();
+    c.fillStyle=col;
+    c.beginPath(); c.moveTo(-32,4); c.quadraticCurveTo(-60,12,-52,-8); c.quadraticCurveTo(-48,-14,-30,-4); c.fill();
+    [[-18,14],[-6,14],[8,14],[20,14]].forEach(([lx])=>{
+      c.beginPath(); c.moveTo(lx,14); c.lineTo(lx-2,36); c.lineTo(lx+6,36); c.lineTo(lx+8,14); c.closePath(); c.fill();
+    });
+    c.fillStyle='rgba(255,255,255,0.12)'; c.beginPath(); c.ellipse(0,2,14,8,0,0,Math.PI*2); c.fill();
+    c.restore();
+  }
+
+  const SHAPES = [drawRex, drawBrachio, drawRex, drawRex, drawBrachio, drawRex];
+  const NUM = 18;
+
+  const dinos = Array.from({length:NUM},(_,i)=>({
+    x: Math.random()*1800, y: Math.random()*1200,
+    vx: (Math.random()-0.5)*0.35,
+    vy: -(0.25+Math.random()*0.5),
+    sc: 0.42+Math.random()*0.65,
+    a:  0.055+Math.random()*0.10,
+    flip: Math.random()>0.5,
+    col: DINO_COLS[i % DINO_COLS.length],
+    wob: Math.random()*Math.PI*2,
+    wobSpeed: 0.006+Math.random()*0.012,
+    rot: 0, rotSpeed: (Math.random()-0.5)*0.003,
+    shape: SHAPES[i % SHAPES.length],
+    pulse:0, pd:1
+  }));
+
+  (function loop(){
+    ctx.clearRect(0,0,W,H);
+    dinos.forEach(d=>{
+      d.wob += d.wobSpeed; d.rot += d.rotSpeed;
+      d.pulse += 0.018*d.pd; if(d.pulse>1||d.pulse<0) d.pd*=-1;
+      d.x += d.vx + Math.sin(d.wob)*0.28; d.y += d.vy;
+      if(d.y<-160){ d.y=H+100; d.x=Math.random()*W; }
+      if(d.x<-160) d.x=W+100;
+      if(d.x>W+160) d.x=-100;
+      ctx.save(); ctx.translate(d.x,d.y); ctx.rotate(d.rot);
+      d.shape(ctx,0,0,d.sc,d.col,d.a+d.pulse*0.03,d.flip);
+      ctx.restore();
+    });
+    requestAnimationFrame(loop);
+  })();
+})();
+
+/* ═══ 3. PUZZLE FLOAT PIECES ═══ */
+(function(){
+  const cont = document.getElementById('puzzle-container');
+  const cols = ['#1D6FA4','#D94F4F','#F5C518','#4CAF7D','#8B5CF6'];
+  const PIECE = `<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><path d="M5,5 h15 q0,-8 5,-8 5,0 5,8 h15 v15 q8,0 8,5 0,5,-8,5 v15 h-15 q0,8,-5,8-5,0,-5,-8 h-15 v-15 q-8,0,-8,-5 0,-5,8,-5 z" fill="currentColor" opacity="0.85"/></svg>`;
+  for(let i=0;i<22;i++){
+    const el = document.createElement('div');
+    el.className = 'puzzle-float';
+    const size = 18+Math.random()*22;
+    const col  = cols[Math.floor(Math.random()*cols.length)];
+    el.style.cssText = `left:${Math.random()*100}vw;bottom:-60px;width:${size}px;height:${size}px;color:${col};animation-duration:${14+Math.random()*16}s;animation-delay:${Math.random()*18}s;`;
+    el.innerHTML = PIECE;
+    cont.appendChild(el);
+  }
+})();
+
+/* ═══ 4. CARD REVEAL ═══ */
+(function(){
+  const cards = document.querySelectorAll('.article-card');
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  },{threshold:0.08});
+  cards.forEach((c,i)=>{ c.style.transitionDelay=`${i*0.06}s`; obs.observe(c); });
+})();
+
+/* ═══ 5. CURSOR SPARKS ═══ */
+(function(){
+  const COLS=['#1D6FA4','#D94F4F','#F5C518','#4CAF7D','#8B5CF6'];
+  let last=0;
+  document.addEventListener('mousemove',e=>{
+    const now=Date.now(); if(now-last<40) return; last=now;
+    const dot=document.createElement('div');
+    const c=COLS[Math.floor(Math.random()*COLS.length)];
+    const s=5+Math.random()*7;
+    dot.style.cssText=`position:fixed;left:${e.clientX}px;top:${e.clientY}px;width:${s}px;height:${s}px;border-radius:50%;background:${c};pointer-events:none;z-index:9990;opacity:0.75;transform:translate(-50%,-50%);transition:opacity 0.55s,transform 0.55s;`;
+    document.body.appendChild(dot);
+    requestAnimationFrame(()=>{ dot.style.opacity='0'; dot.style.transform='translate(-50%,-50%) scale(2.5)'; });
+    setTimeout(()=>dot.remove(), 600);
+  });
+})();
 </script>
 </body>
 </html>
